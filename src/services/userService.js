@@ -4,16 +4,24 @@
  * @version 0.0.1
  */
 
-import axios from "axios";
 import apiClient from "./apiHelper";
 
 class UserService {
     static async signUp(username, nickname, password) {
         try {
-            const res = await apiClient.post('/user/signUp');
+            const res = await apiClient.post('/user/signUp', {username, nickname, password});
             return res;
         } catch (err) {
             throw new Error(err.message || 'Failed to create confession');
+        }
+    }
+
+    static async login(username, password) {
+        try {
+            const res = await apiClient.post('/user/login', {username, password}); 
+            return res; 
+        } catch (err) {
+            throw new Error(err.message || 'Login failed'); 
         }
     }
 } 

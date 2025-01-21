@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import validatePassword from "../utils/validatePassword";
+import UserService from "../services/userService";
 
 const SignUp = () => {
   return (
@@ -32,22 +33,12 @@ const SignUpContainer = () => {
       return;
     }
     setLoading(true);
+    
     try {
-      const res = await axios.post("http://localhost:3000/api/user/signUp", {
-        username,
-        nickname,
-        password,
-      });
-      if (res.data.success) {
-        navigate("/login");
-      } else if (res.data.message === `Username ${username} already exists`) {
-        setError("Username already exists");
-      } else {
-        setError("500");
-      }
-    } catch {
-      setError("500");
-    } finally {
+      await UserService.signUp(username, nickname, password); 
+      navigate('/createConfession');
+    } catch(err) {
+      console.info(`Has error: ${err.message}`);
       setLoading(false);
     }
   };
