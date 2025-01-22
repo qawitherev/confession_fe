@@ -12,7 +12,7 @@ class UserService {
             const res = await apiClient.post('/user/signUp', {username, nickname, password});
             return res;
         } catch (err) {
-            throw new Error(err.message || 'Failed to create confession');
+            throw err; 
         }
     }
 
@@ -21,7 +21,7 @@ class UserService {
             const res = await apiClient.post('/user/login', {username, password}); 
             return res; 
         } catch (err) {
-            throw new Error(err.message || 'Login failed'); 
+            throw err; 
         }
     }
 } 

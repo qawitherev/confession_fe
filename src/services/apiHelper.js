@@ -13,7 +13,6 @@ const apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use((config)=> {
-    console.info(`apiHelper>baseUrl: ${process.env.REACT_APP_API_BASE_URL}`)
     const token = localStorage.getItem('token'); 
     if (token) {
         config.headers.Authorization = token; 
@@ -26,11 +25,16 @@ apiClient.interceptors.response.use(
         if(response.data.success) {
             return response.data.data;
         } else {
-            return Promise.reject(new Error(response.data.message || 'Unknown error'))
+            const err = new Error(response.data.message); 
+            err.statusCode = response.status; 
+            return Promise.reject(err); 
         }
     }, 
-    (error) => {
-        return Promise.reject(error); 
+    (error) => { 
+        const err = new Error(error.message); 
+        err.data = error.response.data;
+        err.statusCode = error.status; 
+        return Promise.reject(err); 
     }
 )
 

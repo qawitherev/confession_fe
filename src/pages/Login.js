@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import apiClient from "../services/apiHelper";
+import UserService from "../services/userService";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -14,23 +16,18 @@ const Login = () => {
     setLoading(true);
     
     try {
-        const res = await axios.post("http://localhost:3000/api/user/login", {username, password});
-        console.info(res.data.data.token)
-        if(res.data.success) {
-            localStorage.setItem("token", res.data.data.token);
-            localStorage.setItem("uid", res.data.data.userId);
-            navigate("/createConfession");
-        } else if(res.data.message === "User not found") {
-            setError("User not found");
-        } else if (res.data.message === "Password is incorrect") {
-            setError("Password is incorrect");
-        } else {
-            setError("500");
-        }
-    }catch {
-        setError("500");
-    }finally {
-        setLoading(false);
+      const res = await UserService.login(username, password); 
+      // const { userId, username, token } = res; 
+    } catch (err) {
+      console.info(err); 
+      if (err.statusCode === 401) {
+        setError('Invalid username or password. Please try again')
+      } else {
+        setError('Something went wrong. Please try again');
+        console.error(err.message); 
+      }
+    } finally {
+      setLoading(false); 
     }
 
   };
@@ -64,8 +61,8 @@ const Login = () => {
                 setError("");
                 setPassword(e.target.value)}}
           />
-            {error === "Password is incorrect" && (
-                <span className="text-red-500 text-xs">Password is incorrect</span>
+            {error && (
+                <span className="text-red-500 text-xs">{error}</span>
             )}
         </div>
         <button

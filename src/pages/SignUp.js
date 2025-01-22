@@ -38,7 +38,12 @@ const SignUpContainer = () => {
       await UserService.signUp(username, nickname, password); 
       navigate('/createConfession');
     } catch(err) {
-      console.info(`Has error: ${err.message}`);
+      if (err.statusCode == 409) {
+        setError(`${err.data.message}`); 
+      } else {
+        setError('Something went wrong. Please try again later');
+      }
+    } finally {
       setLoading(false);
     }
   };
@@ -60,9 +65,7 @@ const SignUpContainer = () => {
           }}
           required
         />
-        {error === "Username already exists" && (
-          <span className="text-red-500 text-xs">Username already exists</span>
-        )}
+        
         <label className="text-sm">Nickname</label>
         <input
           type="text"
@@ -119,6 +122,9 @@ const SignUpContainer = () => {
           By signing up, you agree to our Terms of Service and Policy
         </span>
       </div>
+      {error && (
+          <span className="text-red-500 text-xs">{error}</span>
+        )}
       <button
         className="bg-blue-500 text-white px-4 py-2 rounded-lg
   hover:bg-blue-600 active:bg-blue-700 
