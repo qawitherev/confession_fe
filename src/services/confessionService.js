@@ -28,6 +28,24 @@ class ConfessionService {
         }
     }
 
+    static async getRejectedConfessions() {
+        try {
+            const res = await apiClient.get('/confession/getRejectedConfessions'); 
+            return res; 
+        } catch (err) {
+            throw err; 
+        }
+    }
+
+    static async getPublishedConfessions() {
+        try {
+            const res = await apiClient.get('/confession/getPublishedConfessions'); 
+            return res; 
+        } catch (err) {
+            throw err; 
+        }
+    }
+
     static async publishConfession(confessionId) {
         try {
             await apiClient.post('/confession/publishConfession', {confessionId}); 

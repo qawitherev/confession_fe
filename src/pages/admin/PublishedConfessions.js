@@ -1,12 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
-import apiClient from "../../services/apiHelper";
-import GreyPill from "../../component/Pill";
-import TheTable from "../../component/AdminConfessionsTable";
 import ConfessionService from "../../services/confessionService";
+import TheTable from "../../component/AdminConfessionsTable";
 
-const RejectedConfessions = () => {
+const PublishedConfessions = () => {
     const navigate = useNavigate();
     const [confessions, setConfessions] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -15,7 +13,7 @@ const RejectedConfessions = () => {
     const fetchData = async () => {
         setLoading(true)
         try {
-            const result = await ConfessionService.getRejectedConfessions(); 
+            const result = await ConfessionService.getPublishedConfessions(); 
             const data = result[0]; 
             if (Array.isArray(data)) {
                 const rc = data.map(c => ({
@@ -58,10 +56,10 @@ const RejectedConfessions = () => {
 
     return (
         <div className="flex flex-col gap-4 w-full overflow-y-auto p-4">
-            <h1 className="text-xl font-semibold">Rejected Confessions</h1>
-            <TheTable data={confessions} isRejected={true}/>
+            <h1 className="text-xl font-semibold">Published Confessions</h1>
+            <TheTable data={confessions} isRejected={false}/>
         </div>
     );
 }
 
-export default RejectedConfessions;
+export default PublishedConfessions;
