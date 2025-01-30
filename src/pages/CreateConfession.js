@@ -3,50 +3,35 @@ import tokenValid from "../utils/checkToken";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Select from "react-select";
-import axios from "axios";
 import LogoutBtn from "../component/LogoutBtn";
+import ConfessionService from "../services/confessionService";
+import { toast, ToastContainer } from "react-toastify";
+
 
 const CreateConfession = () => {
   const navigate = useNavigate();
-  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
   const [title, setTitle] = useState("");
   const [confession, setConfession] = useState("");
   const [tags, setTags] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const userId = localStorage.getItem("uid");
 
   const dropdownChange = (selectedOptions) => {
-    setSelectedOptions(selectedOptions);
+    setSelectedTags(selectedOptions);
   };
 
   const submitOnClick = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post(
-        "http://localhost:3000/api/confession/createConfession",
-        {
-          userId,
-          title,
-          body: confession,
-          tagIds: selectedOptions.map((option) => option.value),
-        },
-        {
-          headers: {
-            authorization: localStorage.getItem('token'),
-          },
-        }
-      );
-      if (res.data.success) {
-        console.info("confession created");
-        navigate("/confession");
-      }
+      await ConfessionService.createConfession(title, confession, selectedTags.map(t=> t.value)); 
+      toast.success(`Confession submitted. Awaiting approval from admin`); 
     } catch (err) {
-      console.error(err);
-      setError("500");
+      console.error(err.message); 
+      toast.error(`Confession failed to submit. Try again later`); 
     } finally {
-      setLoading(false);
+      setLoading(false); 
     }
   };
 
@@ -55,20 +40,22 @@ const CreateConfession = () => {
       navigate("/login");
       return;
     }
-    const getTags = async () => {
-      const data = await getTagsFromAPI();
-      if (data) {
-        const options = data.tags.map((tag) => ({
-          value: tag.id,
-          label: tag.label,
-        }));
-        setTags(options);
-      } else {
-        console.error("tags not found");
-      }
-    };
-    getTags();
+    getAllTags(); 
   }, []);
+
+  const getAllTags = async () => {
+    try {
+     const res = await ConfessionService.getAllTags();
+     const allTags = res[0];
+     const options = allTags.map(t=> ({
+      value: t.id, 
+      label: t.label
+     }));
+     setTags(options); 
+    } catch (err) {
+      setError(err.message); 
+    }
+  }
 
   return (
     <>
@@ -105,7 +92,7 @@ const CreateConfession = () => {
             required
             options={tags}
             isMulti
-            value={selectedOptions}
+            value={selectedTags}
             onChange={dropdownChange}
             className="basic-multi-select w-full"
             classNamePrefix="select"
@@ -121,21 +108,9 @@ const CreateConfession = () => {
           </button>
         </div>
       </form>
+      <ToastContainer />
     </>
   );
-};
-
-const getTagsFromAPI = async () => {
-  try {
-    const response = await fetch(
-      "http://localhost:3000/api/confession/getTags"
-    );
-    const data = await response.json();
-    return data;
-  } catch (err) {
-    console.error(err);
-    return null;
-  }
 };
 
 export default CreateConfession;

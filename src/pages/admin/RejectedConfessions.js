@@ -1,8 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
+import apiClient from "../../services/apiHelper";
+import TimeUtil from "../../utils/TimeUtils";
+import GreyPill from "../../component/Pill";
 
-const RejectedConfessionsAdmin = () => {
+const RejectedConfessions = () => {
     const navigate = useNavigate();
     const [confessions, setConfessions] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -11,20 +14,40 @@ const RejectedConfessionsAdmin = () => {
     const fetchData = async () => {
         setLoading(true)
         try {
-            const res = await axios.get('http://localhost:3000/api/confession/getRejectedConfessionsAdmin',
-                {
-                    headers: {
-                        authorization: localStorage.getItem('token')
-                    }
-                }
-            );
-           const confessions = res.data.rejectedConfessions;
-           setConfessions(confessions);
-           setLoading(false);
+            const result = await apiClient.get('/confession/getRejectedConfessions');
+            const data = result[0]; 
+            if (Array.isArray(data)) {
+                const rc = data.map(c => ({
+                    username: c.username, 
+                    title: c.title, 
+                    body: c.body, 
+                    tags: c.tags.split(',').map(a=>a.trim()), 
+                    submittedOn: new Date(c.submittedOn).toLocaleDateString('en-US', {
+                        year: 'numeric', 
+                        month: '2-digit', 
+                        day: '2-digit', 
+                        hour: '2-digit', 
+                        minute: '2-digit', 
+                        hour12: true
+                    }), 
+                    rejectedBy: c.rejectedBy,
+                    rejectedAt: new Date(c.rejectedAt).toLocaleDateString('en-US', {
+                        year: 'numeric', 
+                        month: '2-digit', 
+                        day: '2-digit', 
+                        hour: '2-digit', 
+                        minute: '2-digit', 
+                        hour12: true
+                    })
+                }));
+                setConfessions(rc); 
+            }
         } catch (err) {
             if(err.response.status === 403) {
                 navigate('/unauthorize');
             }
+        } finally {
+            setLoading(false); 
         }
     }
 
@@ -51,8 +74,8 @@ const TheTable = ({ data }) => {
                         <th className="text-left p-2 border border-gray-400 bg-slate-300">Title</th>
                         <th className="text-left p-2 border border-gray-400 bg-slate-300">Body</th>
                         <th className="text-left p-2 border border-gray-400 bg-slate-300">Tags</th>
-                        <th className="text-left p-2 border border-gray-400 bg-slate-300">Published By</th>
-                        <th className="text-left p-2 border border-gray-400 bg-slate-300">Published At</th>
+                        <th className="text-left p-2 border border-gray-400 bg-slate-300">Rejected By</th>
+                        <th className="text-left p-2 border border-gray-400 bg-slate-300">Rejected At</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -62,9 +85,9 @@ const TheTable = ({ data }) => {
                             <td className="p-2 border border-gray-400">{d.username}</td>
                             <td className="p-2 border border-gray-400">{d.title}</td>
                             <td className="p-2 border border-gray-400">{d.body}</td>
-                            <td className="p-2 border border-gray-400">{d.tags}</td>
-                            <td className="p-2 border border-gray-400">{d.executedBy}</td>
-                            <td className="p-2 border border-gray-400">{new Date(d.executedAt).toLocaleString()}</td>
+                            <td className="p-2 border border-gray-400"><div className="flex flex-wrap gap-1">{d.tags.map((tag, index)=>(<GreyPill key={index} textData={tag}/>))}</div></td>
+                            <td className="p-2 border border-gray-400">{d.rejectedBy}</td>
+                            <td className="p-2 border border-gray-400">{d.rejectedAt}</td>
                         </tr>
                     ))}
                 </tbody>
@@ -73,4 +96,4 @@ const TheTable = ({ data }) => {
     );
 }
 
-export default RejectedConfessionsAdmin;
+export default RejectedConfessions;

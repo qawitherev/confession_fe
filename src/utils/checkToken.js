@@ -2,8 +2,7 @@ import { jwtDecode } from 'jwt-decode';
 
 const tokenValid = () => {
     const token = localStorage.getItem('token');
-    const uid = localStorage.getItem('uid');
-    if (!token || !uid) {
+    if (!token) {
         return false;
     }
 

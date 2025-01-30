@@ -17,7 +17,9 @@ const Login = () => {
     
     try {
       const res = await UserService.login(username, password); 
-      // const { userId, username, token } = res; 
+      const { token, userId } = res; 
+      navigate('/createConfession');
+      localStorage.setItem('token', token);
     } catch (err) {
       console.info(err); 
       if (err.statusCode === 401) {
