@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import ConfessionService from "../../services/confessionService";
 import TheTable from "../../component/AdminConfessionsTable";
+import TimeUtil from "../../utils/TimeUtils";
 
 const PublishedConfessions = () => {
     const navigate = useNavigate();
@@ -21,23 +22,9 @@ const PublishedConfessions = () => {
                     title: c.title, 
                     body: c.body, 
                     tags: c.tags.split(',').map(a=>a.trim()), 
-                    submittedOn: new Date(c.submittedOn).toLocaleDateString('en-US', {
-                        year: 'numeric', 
-                        month: '2-digit', 
-                        day: '2-digit', 
-                        hour: '2-digit', 
-                        minute: '2-digit', 
-                        hour12: true
-                    }), 
+                    submittedOn: new Date(c.submittedOn).toLocaleDateString('en-US', TimeUtil.timeConfig()), 
                     rejectedBy: c.rejectedBy,
-                    rejectedAt: new Date(c.rejectedAt).toLocaleDateString('en-US', {
-                        year: 'numeric', 
-                        month: '2-digit', 
-                        day: '2-digit', 
-                        hour: '2-digit', 
-                        minute: '2-digit', 
-                        hour12: true
-                    })
+                    rejectedAt: new Date(c.rejectedAt).toLocaleDateString('en-US', TimeUtil.timeConfig())
                 }));
                 setConfessions(rc); 
             }

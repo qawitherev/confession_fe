@@ -5,17 +5,9 @@ import Login from './pages/Login';
 import CreateConfession from './pages/CreateConfession';
 import PendingConfessions from './pages/admin/PendingConfessions';
 import Unauthorize from './pages/common/Unauthorize';
-import Confessions from './pages/common/Confessions';
 import RejectedConfessions from './pages/admin/RejectedConfessions';
 import PublishedConfessions from './pages/admin/PublishedConfessions';
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <SignUp />
-//     </div>
-//   );
-// }
+import Confessions from './pages/Confessions';
 
 function App() {
   return (

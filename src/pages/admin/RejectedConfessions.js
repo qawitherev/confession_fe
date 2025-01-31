@@ -5,6 +5,7 @@ import apiClient from "../../services/apiHelper";
 import GreyPill from "../../component/Pill";
 import TheTable from "../../component/AdminConfessionsTable";
 import ConfessionService from "../../services/confessionService";
+import TimeUtil from "../../utils/TimeUtils";
 
 const RejectedConfessions = () => {
     const navigate = useNavigate();
@@ -23,23 +24,9 @@ const RejectedConfessions = () => {
                     title: c.title, 
                     body: c.body, 
                     tags: c.tags.split(',').map(a=>a.trim()), 
-                    submittedOn: new Date(c.submittedOn).toLocaleDateString('en-US', {
-                        year: 'numeric', 
-                        month: '2-digit', 
-                        day: '2-digit', 
-                        hour: '2-digit', 
-                        minute: '2-digit', 
-                        hour12: true
-                    }), 
+                    submittedOn: new Date(c.submittedOn).toLocaleDateString('en-US', TimeUtil.timeConfig()), 
                     rejectedBy: c.rejectedBy,
-                    rejectedAt: new Date(c.rejectedAt).toLocaleDateString('en-US', {
-                        year: 'numeric', 
-                        month: '2-digit', 
-                        day: '2-digit', 
-                        hour: '2-digit', 
-                        minute: '2-digit', 
-                        hour12: true
-                    })
+                    rejectedAt: new Date(c.rejectedAt).toLocaleDateString('en-US', TimeUtil.timeConfig())
                 }));
                 setConfessions(rc); 
             }

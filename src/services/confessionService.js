@@ -61,6 +61,15 @@ class ConfessionService {
             throw err;
         }
     }
+
+    static async getConfessions() {
+        try {
+            const res = await apiClient('/confession/getConfessions'); 
+            return res; 
+        } catch (err) {
+            throw err; 
+        }
+    }
 }
 
 export default ConfessionService; 

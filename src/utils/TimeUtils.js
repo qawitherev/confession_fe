@@ -28,15 +28,19 @@ class TimeUtil {
             case (diffDays < 6): 
                 return `${diffDays} ${diffDays === 1 ? `day` : `days`} ago`; 
             default: 
-                return submitTime.toLocaleDateString('en-US', {
-                    year: 'numeric', 
-                    month: '2-digit', 
-                    day: '2-digit', 
-                    hour: '2-digit', 
-                    minute: '2-digit', 
-                    hour12: true
-                });
+                return submitTime.toLocaleDateString('en-US', TimeUtil.timeConfig());
         }
+    }
+
+    static timeConfig() {
+        return ({
+            year: 'numeric', 
+            month: '2-digit', 
+            day: '2-digit', 
+            hour: '2-digit', 
+            minute: '2-digit', 
+            hour12: true
+        })
     }
 }
 
