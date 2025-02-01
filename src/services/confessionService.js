@@ -1,5 +1,8 @@
 import apiClient from "./apiHelper";
 
+const REACTION_RELATE = 'Relate';
+const REACTION_NOT_RELATE = 'Not Relate';
+
 class ConfessionService {
     static async getAllTags() {
         try {
@@ -66,6 +69,22 @@ class ConfessionService {
         try {
             const res = await apiClient('/confession/getConfessions'); 
             return res; 
+        } catch (err) {
+            throw err; 
+        }
+    }
+
+    static async relateConfession(confessionId) {
+        try {
+            await apiClient.post('/confession/reactConfession', {confessionId, reaction: REACTION_RELATE});
+        } catch (err) {
+            throw err; 
+        }
+    }
+
+    static async notRelateConfession(confessionId) {
+        try {
+            await apiClient.post('/confession/reactConfession', {confessionId, reaction: REACTION_NOT_RELATE});
         } catch (err) {
             throw err; 
         }
