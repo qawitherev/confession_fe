@@ -24,6 +24,22 @@ class UserService {
             throw err; 
         }
     }
+
+    static async getUsers(page, pageSize) {
+        try {
+            const res = await apiClient.get('/user/getUsers', 
+                {
+                    params: {
+                        page, 
+                        pageSize
+                    }
+                }
+            );
+            return res; 
+        } catch (err) {
+            throw err; 
+        }
+    }
 } 
 
 export default UserService; 

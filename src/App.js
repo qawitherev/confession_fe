@@ -8,6 +8,7 @@ import Unauthorize from './pages/common/Unauthorize';
 import RejectedConfessions from './pages/admin/RejectedConfessions';
 import PublishedConfessions from './pages/admin/PublishedConfessions';
 import Confessions from './pages/Confessions';
+import AdminUsers from './pages/admin/AdminUsers';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/publishedConfessions" element={<PublishedConfessions/>} />
         <Route path="/unauthorized" element={<Unauthorize />} />
         <Route path="/confessions" element={<Confessions />} />
+        <Route path="/users" element={<AdminUsers/>} />
       </Routes>
     </Router>
   );
