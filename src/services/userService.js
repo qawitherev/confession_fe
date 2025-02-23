@@ -25,11 +25,12 @@ class UserService {
         }
     }
 
-    static async getUsers(page, pageSize) {
+    static async getUsers(searchKeyword, page, pageSize) {
         try {
             const res = await apiClient.get('/user/getUsers', 
                 {
                     params: {
+                        searchKeyword,
                         page, 
                         pageSize
                     }
