@@ -13,7 +13,7 @@ class TimeUtil {
      */
     static findWhenPosted(timeSubmitted) {
         const currentTime = new Date(); 
-        const submitTime = new Date(timeSubmitted); 
+        const submitTime = new Date(timeSubmitted).getTime() + 8 * 60 * 60 * 1000;
         const diffMinutes = Math.floor((currentTime - submitTime) / (1000*60)); //because in miliseconds 
         const diffHours = Math.floor(diffMinutes / 60); 
         const diffDays = Math.floor(diffHours / 24); 

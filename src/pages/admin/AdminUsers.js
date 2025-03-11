@@ -29,7 +29,7 @@ const AdminUsers = () => {
           userType: user.userType,
           username: user.username,
           nickname: user.nickname,
-          createdAt: user.createdAt,
+          createdAt: new Date(new Date(user.createdAt).getTime() + 8 * 60 * 60 * 1000),
         };
       });
       setPaginationData(res.pagination);
