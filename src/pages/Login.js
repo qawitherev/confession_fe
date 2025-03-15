@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiClient from "../services/apiHelper";
 import UserService from "../services/userService";
+import { USER_TYPE_ADMIN } from "../constants/user";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -17,8 +18,12 @@ const Login = () => {
     
     try {
       const res = await UserService.login(username, password); 
-      const { token, userId } = res; 
-      navigate('/createConfession');
+      const { token, userType } = res; 
+      if (userType == USER_TYPE_ADMIN) {
+        navigate('/pendingConfessions'); 
+      } else {
+        navigate('/createConfession');
+      }
       localStorage.setItem('token', token);
     } catch (err) {
       console.info(err); 

@@ -26,7 +26,7 @@ const RejectedConfessions = () => {
                     tags: c.tags.split(',').map(a=>a.trim()), 
                     submittedOn: new Date(c.submittedOn).toLocaleDateString('en-US', TimeUtil.timeConfig()), 
                     rejectedBy: c.rejectedBy,
-                    rejectedAt: new Date(c.rejectedAt).toLocaleDateString('en-US', TimeUtil.timeConfig())
+                    rejectedAt: TimeUtil.formatgmtplus8(c.rejectedAt),
                 }));
                 setConfessions(rc); 
             }

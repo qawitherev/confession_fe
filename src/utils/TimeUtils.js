@@ -32,6 +32,11 @@ class TimeUtil {
         }
     }
 
+    static formatgmtplus8(gmtZero) {
+        const submitTime = new Date(new Date(gmtZero).getTime() + 8 * 60 * 60 * 1000);
+        return submitTime.toLocaleString('en-US', TimeUtil.timeConfig());
+    }
+
     static timeConfig() {
         return ({
             year: 'numeric', 
