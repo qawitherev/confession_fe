@@ -89,6 +89,17 @@ class ConfessionService {
             throw err; 
         }
     }
+
+    static async getConfessionsForUser(status) {
+        try {
+            const res = await apiClient.get('/confession/getConfessionsForUser', {
+                params: {status}
+            }); 
+            return res; 
+        } catch (err) {
+            throw err; 
+        }
+    }
 }
 
 export default ConfessionService; 
