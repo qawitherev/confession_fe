@@ -28,7 +28,7 @@ class TimeUtil {
             case (diffDays < 6): 
                 return `${diffDays} ${diffDays === 1 ? `day` : `days`} ago`; 
             default: 
-                return submitTime.toLocaleDateString('en-US', TimeUtil.timeConfig());
+                return new Date(submitTime).toLocaleString('en-US', TimeUtil.timeConfig());
         }
     }
 
