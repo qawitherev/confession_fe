@@ -4,30 +4,29 @@ import { useFetcher, useNavigate } from "react-router-dom";
 import ConfessionItem from "../component/ConfessionItem";
 import { toast, ToastContainer } from "react-toastify";
 
-
 const Confessions = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [confessions, setConfessions] = useState([]);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleRelate = async (confessionId) => {
     try {
-      await ConfessionService.relateConfession(confessionId); 
+      await ConfessionService.relateConfession(confessionId);
     } catch (err) {
-      toast.error(`Something went wrong. Try again later`); 
-      console.error(err.message); 
+      toast.error(`Something went wrong. Try again later`);
+      console.error(err.message);
     }
-  }
+  };
 
   const handleNotRelate = async (confessionId) => {
     try {
-      await ConfessionService.notRelateConfession(confessionId); 
+      await ConfessionService.notRelateConfession(confessionId);
     } catch (err) {
       toast.error(`Something went wrong. Try again later`);
-      console.error(err.message); 
+      console.error(err.message);
     }
-  }
+  };
 
   const getData = async () => {
     try {
@@ -41,7 +40,7 @@ const Confessions = () => {
         tags: d.tags.split(",").map((t) => t.trim()),
         relateCount: d.relateCount,
         notRelateCount: d.notRelateCount,
-        reaction: d.reaction
+        reaction: d.reaction,
       }));
       setConfessions(c);
     } catch (err) {
@@ -58,20 +57,24 @@ const Confessions = () => {
     getData();
   }, []);
 
-  return <div className="px-3 py-5">
-    <div className="flex flex-row justify-center">
+  return (
+    <div className="px-3 py-5">
+      <div className="flex flex-row justify-center">
         <div className="w-1/2">
-        <div className="text-2xl font-bold">Confession</div>
-        {confessions.map((confession, index) => (<ConfessionItem key={index} 
-        handleRelate={handleRelate}
-        handleNotRelate={handleNotRelate}
-        confession={confession} />))}
+          <div className="text-2xl font-bold">Confession</div>
+          {confessions.map((confession, index) => (
+            <ConfessionItem
+              key={index}
+              handleRelate={handleRelate}
+              handleNotRelate={handleNotRelate}
+              confession={confession}
+            />
+          ))}
         </div>
+      </div>
+      <ToastContainer />
     </div>
-    <ToastContainer />
-  </div>;
+  );
 };
-
-
 
 export default Confessions;
