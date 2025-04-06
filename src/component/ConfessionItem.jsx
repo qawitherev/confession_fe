@@ -5,6 +5,7 @@ import SentimentVerySatisfiedSharpIcon from "@mui/icons-material/SentimentVerySa
 import MoodBadSharpIcon from "@mui/icons-material/MoodBadSharp";
 import SentimentVerySatisfiedTwoToneIcon from "@mui/icons-material/SentimentVerySatisfiedTwoTone";
 import MoodBadTwoToneIcon from "@mui/icons-material/MoodBadTwoTone";
+import { Button } from "../components/ui/button";
 
 const REACTION_RELATE = "Relate";
 const REACTION_NOT_RELATE = "Not Relate";
@@ -13,11 +14,14 @@ const ConfessionItem = ({
   confession,
   handleRelate = () => {},
   handleNotRelate = () => {},
+  handleDelete = () => {},
   status = "",
 }) => {
   let theTime;
   if (status === "") {
     theTime = confession.submittedOn;
+  } else if (status === "Deleted") {
+    theTime = confession.executedAt;
   } else {
     theTime = confession.createdAt;
   }
@@ -31,50 +35,54 @@ const ConfessionItem = ({
             <GreyPill key={index} textData={t} />
           ))}
         </div>
-        {
-          (status === "" || status === 'Published' ? (
-            <div className="flex flex-row gap-2">
-              <div className="w-fit flex flex-row justify-start gap-1">
-                <Tooltip title="Relate" arrow placement="top" enterDelay={200}>
-                  <div
-                    onClick={() => handleRelate(confession.confessionId)}
-                    className="transition-all duration-300 hover:scale-125 cursor-pointer"
-                  >
-                    {confession.reaction === REACTION_RELATE ? (
-                      <SentimentVerySatisfiedTwoToneIcon fontSize="medium" />
-                    ) : (
-                      <SentimentVerySatisfiedSharpIcon fontSize="medium" />
-                    )}
-                  </div>
-                </Tooltip>
-                <div className="">{confession.relateCount}</div>
-              </div>
-              <div className="w-fit flex flex-row justify-start gap-1">
-                <Tooltip
-                  title="Not Relate"
-                  arrow
-                  placement="top"
-                  enterDelay={200}
+        {status === "" || status === "Published" ? (
+          <div className="flex flex-row gap-2">
+            <div className="w-fit flex flex-row justify-start gap-1">
+              <Tooltip title="Relate" arrow placement="top" enterDelay={200}>
+                <div
+                  onClick={() => handleRelate(confession.confessionId)}
+                  className="transition-all duration-300 hover:scale-125 cursor-pointer"
                 >
-                  <div
-                    onClick={() => handleNotRelate(confession.confessionId)}
-                    className="transition-all duration-300 hover:scale-125 cursor-pointer"
-                  >
-                    {confession.reaction === REACTION_NOT_RELATE ? (
-                      <MoodBadTwoToneIcon fontSize="medium" />
-                    ) : (
-                      <MoodBadSharpIcon fontSize="medium" />
-                    )}
-                  </div>
-                </Tooltip>
-                <div className="">{confession.notRelateCount}</div>
-              </div>
+                  {confession.reaction === REACTION_RELATE ? (
+                    <SentimentVerySatisfiedTwoToneIcon fontSize="medium" />
+                  ) : (
+                    <SentimentVerySatisfiedSharpIcon fontSize="medium" />
+                  )}
+                </div>
+              </Tooltip>
+              <div className="">{confession.relateCount}</div>
             </div>
-          ) : null)
-        }
-        <div className="flex flex-row justify-end text-sm font-semibold">
-          {/* {status === '' ? TimeUtil.findWhenPosted(confession.submittedOn) : TimeUtil.findWhenPosted(confession.createdAt)} */}
+            <div className="w-fit flex flex-row justify-start gap-1">
+              <Tooltip
+                title="Not Relate"
+                arrow
+                placement="top"
+                enterDelay={200}
+              >
+                <div
+                  onClick={() => handleNotRelate(confession.confessionId)}
+                  className="transition-all duration-300 hover:scale-125 cursor-pointer"
+                >
+                  {confession.reaction === REACTION_NOT_RELATE ? (
+                    <MoodBadTwoToneIcon fontSize="medium" />
+                  ) : (
+                    <MoodBadSharpIcon fontSize="medium" />
+                  )}
+                </div>
+              </Tooltip>
+              <div className="">{confession.notRelateCount}</div>
+            </div>
+          </div>
+        ) : null}
+        <div className="flex flex-row justify-end text-sm font-semibold mb-5">
           {TimeUtil.findWhenPosted(theTime)}
+        </div>
+        <div className="flex flex-row justify-end">
+          {status === "" || status === "Deleted" ? null : (
+            <Button 
+            onClick={() => handleDelete(confession.confessionId)}
+            variant="destructive">Delete</Button>
+          )}
         </div>
       </div>
     </>

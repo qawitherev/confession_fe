@@ -16,12 +16,17 @@ const MyConfessions = () => {
     setActiveTab(event);
   };
 
+  const handleDelete = async (confessionId) => {
+    await ConfessionService.deleteConfession(confessionId);
+    await fetchData();
+  }
+
   const fetchData = async () => {
     setLoading(true);
     try {
       const res = await ConfessionService.getConfessionsForUser(activeTab);
       const data = res.map((d) => ({
-        confessionId: d.confessionId,
+        confessionId: d.id,
         title: d.title,
         body: d.body,
         tags: d.tags.split(",").map((t) => t.trim()),
@@ -31,7 +36,6 @@ const MyConfessions = () => {
         notRelateCount: d.not_relate_count,
       }));
       setConfessions(data);
-      console.log(confessions);
     } catch (err) {
       console.error("Error fetching data:", err);
     } finally {
@@ -63,6 +67,7 @@ const MyConfessions = () => {
               <ConfessionItem
                 key={index}
                 confession={confession}
+                handleDelete={handleDelete}
                 status="Pending"
               />
             ))}
@@ -74,6 +79,7 @@ const MyConfessions = () => {
               <ConfessionItem
                 key={index}
                 confession={confession}
+                handleDelete={handleDelete}
                 status="Published"
               />
             ))}
@@ -85,6 +91,7 @@ const MyConfessions = () => {
               <ConfessionItem
                 key={index}
                 confession={confession}
+                handleDelete={handleDelete}
                 status="Rejected"
               />
             ))}

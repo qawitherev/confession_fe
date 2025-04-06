@@ -100,6 +100,14 @@ class ConfessionService {
             throw err; 
         }
     }
+
+    static async deleteConfession(confessionId) {
+        try {
+            await apiClient.delete(`/confession/deleteConfession/${confessionId}`); 
+        } catch (err) {
+            throw err; 
+        }
+    }
 }
 
 export default ConfessionService; 
