@@ -14,6 +14,18 @@ class FeatureService {
             throw err;
         }
     }
+
+    static async updateFeatureStatus(id, status) {
+        try {
+            const res = await apiClient.post('/feature/updateFeatureStatus', {
+                id,
+                status
+            });
+            return res;
+        } catch (err) {
+            throw err;
+        }
+    }
 }
 
 export default FeatureService;

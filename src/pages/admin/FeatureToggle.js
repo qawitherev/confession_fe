@@ -14,6 +14,7 @@ const FeatureToggle = () => {
     const [features, setFeatures] = useState([]);
 
   const navigate = useNavigate();
+
   const fetchData = async () => {
     try {
       const features = await FeatureService.getAllFeaturesStatus();
@@ -22,6 +23,7 @@ const FeatureToggle = () => {
         throw notArray;
       }
       const data = features.map(feature => ({
+        id: feature.id, 
         name: feature.name, 
         isActive: feature.isActive === 1 ? true : false,
       })); 
@@ -36,6 +38,17 @@ const FeatureToggle = () => {
     }
   };
 
+  const handleToggle = async (featureId, isActive) => {
+    console.info(`Toggling feature with ID: ${featureId}`);
+    const status = isActive ? "ACTIVE" : "INACTIVE";
+    try {
+        await FeatureService.updateFeatureStatus(featureId, status);
+        await fetchData(); 
+    } catch (err) {
+        toast.error(err.message);
+    }
+  }
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -43,7 +56,7 @@ const FeatureToggle = () => {
   return (
     <div className="flex flex-col px-4 py-4">
       <h1 className="text-xl font-bold">Feature Toggle</h1>
-      <FeatureToggleSwitch />
+      {features.map((feature, index) => (<FeatureToggleSwitch key={index} feature={feature} onToggle={handleToggle} />))}
       <ToastContainer />
     </div>
   );
