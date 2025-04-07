@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
 const FeatureToggle = () => {
-    const [features, setFeatures] = useState([]);
+  const [features, setFeatures] = useState([]);
 
   const navigate = useNavigate();
 
@@ -22,11 +22,11 @@ const FeatureToggle = () => {
         const notArray = new Error("Response is not an array");
         throw notArray;
       }
-      const data = features.map(feature => ({
-        id: feature.id, 
-        name: feature.name, 
+      const data = features.map((feature) => ({
+        id: feature.id,
+        name: feature.name,
         isActive: feature.isActive === 1 ? true : false,
-      })); 
+      }));
       setFeatures(data);
     } catch (err) {
       if (err.statusCode === 403) {
@@ -41,13 +41,27 @@ const FeatureToggle = () => {
   const handleToggle = async (featureId, isActive) => {
     console.info(`Toggling feature with ID: ${featureId}`);
     const status = isActive ? "ACTIVE" : "INACTIVE";
+
+    //optimistic update
+    setFeatures((preFeatures) =>
+      preFeatures.map((feature) =>
+        feature.id === featureId ? { ...feature, isActive } : feature
+      )
+    );
     try {
-        await FeatureService.updateFeatureStatus(featureId, status);
-        await fetchData(); 
+      await FeatureService.updateFeatureStatus(featureId, status);
     } catch (err) {
-        toast.error(err.message);
+      //something goes wrong, just return to previous state
+      setFeatures((preFeatures) =>
+        preFeatures.map((feature) =>
+          feature.id === featureId
+            ? { ...feature, isActive: !isActive }
+            : feature
+        )
+      );
+      toast.error(err.message);
     }
-  }
+  };
 
   useEffect(() => {
     fetchData();
@@ -56,7 +70,13 @@ const FeatureToggle = () => {
   return (
     <div className="flex flex-col px-4 py-4">
       <h1 className="text-xl font-bold">Feature Toggle</h1>
-      {features.map((feature, index) => (<FeatureToggleSwitch key={index} feature={feature} onToggle={handleToggle} />))}
+      {features.map((feature, index) => (
+        <FeatureToggleSwitch
+          key={index}
+          feature={feature}
+          onToggle={handleToggle}
+        />
+      ))}
       <ToastContainer />
     </div>
   );
