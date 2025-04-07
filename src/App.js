@@ -10,6 +10,7 @@ import PublishedConfessions from './pages/admin/PublishedConfessions';
 import Confessions from './pages/Confessions';
 import AdminUsers from './pages/admin/AdminUsers';
 import MyConfessions from './pages/MyConfessions';
+import FeatureToggle from './pages/admin/FeatureToggle';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/confessions" element={<Confessions />} />
         <Route path="/users" element={<AdminUsers/>} />
         <Route path="/myConfessions" element={<MyConfessions/>} />
+        <Route path="/featureToggle" element={<FeatureToggle/>} />
       </Routes>
     </Router>
   );
