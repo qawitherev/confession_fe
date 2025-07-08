@@ -1,7 +1,9 @@
+import { Link } from "react-router-dom";
+
 const Sidebar = () => {
-    reutrn (
+    return (
         <>
-            <div classname = 'sidebar'>
+            <div className='sidebar'>
                 <ul>
                     <li><Link to="/confession">Confession</Link></li>
                     <li><Link to="/signup">Sign Up</Link></li>
@@ -12,4 +14,4 @@ const Sidebar = () => {
     );
 }
 
-module.exports = Sidebar;
+export default Sidebar;

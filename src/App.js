@@ -11,6 +11,7 @@ import Confessions from './pages/Confessions';
 import AdminUsers from './pages/admin/AdminUsers';
 import MyConfessions from './pages/MyConfessions';
 import FeatureToggle from './pages/admin/FeatureToggle';
+import ShadcnDemo from './pages/ShadcnDemo';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/users" element={<AdminUsers/>} />
         <Route path="/myConfessions" element={<MyConfessions/>} />
         <Route path="/featureToggle" element={<FeatureToggle/>} />
+        <Route path="/shadcn-demo" element={<ShadcnDemo/>} />
       </Routes>
     </Router>
   );

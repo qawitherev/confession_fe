@@ -6,6 +6,7 @@ import MoodBadSharpIcon from "@mui/icons-material/MoodBadSharp";
 import SentimentVerySatisfiedTwoToneIcon from "@mui/icons-material/SentimentVerySatisfiedTwoTone";
 import MoodBadTwoToneIcon from "@mui/icons-material/MoodBadTwoTone";
 import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 
 const REACTION_RELATE = "Relate";
 const REACTION_NOT_RELATE = "Not Relate";
@@ -27,14 +28,17 @@ const ConfessionItem = ({
   }
   return (
     <>
-      <div className="flex flex-col gap-1 px-3 py-6 my-5 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 border-gray-100 bg-white">
-        <div className="text-lg font-bold">{confession.title}</div>
-        <div className="flex flex-wrap text-sm">{confession.body}</div>
-        <div className="flex flex-wrap flex-row gap-1 mt-2">
-          {confession.tags.map((t, index) => (
-            <GreyPill key={index} textData={t} />
-          ))}
-        </div>
+      <Card className="my-5 hover:shadow-lg transition-all duration-300">
+        <CardHeader>
+          <CardTitle className="text-lg">{confession.title}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap text-sm mb-4">{confession.body}</div>
+          <div className="flex flex-wrap flex-row gap-1 mt-2">
+            {confession.tags.map((t, index) => (
+              <GreyPill key={index} textData={t} />
+            ))}
+          </div>
         {status === "" || status === "Published" ? (
           <div className="flex flex-row gap-2">
             <div className="w-fit flex flex-row justify-start gap-1">
@@ -74,17 +78,18 @@ const ConfessionItem = ({
             </div>
           </div>
         ) : null}
-        <div className="flex flex-row justify-end text-sm font-semibold mb-5">
-          {TimeUtil.findWhenPosted(theTime)}
-        </div>
-        <div className="flex flex-row justify-end">
-          {status === "" || status === "Deleted" ? null : (
-            <Button 
-            onClick={() => handleDelete(confession.confessionId)}
-            variant="destructive">Delete</Button>
-          )}
-        </div>
-      </div>
+          <div className="flex flex-row justify-end text-sm font-semibold mb-5">
+            {TimeUtil.findWhenPosted(theTime)}
+          </div>
+          <div className="flex flex-row justify-end">
+            {status === "" || status === "Deleted" ? null : (
+              <Button 
+              onClick={() => handleDelete(confession.confessionId)}
+              variant="destructive">Delete</Button>
+            )}
+          </div>
+        </CardContent>
+      </Card>
     </>
   );
 };
